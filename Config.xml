@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AppConfig>
+  <Global>
+    <Item Key="ServerUrl" Value="http://35.222.155.75" />
+    <Item Key="UpdateInterval" Value="300" />
+    <Item Key="HtmlTemplate">
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+         &lt;head&gt;
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+            &lt;style&gt;
+               * {
+               box-sizing: border-box;
+               }
+               body {
+               font-family: Arial, Helvetica, sans-serif;
+               }
+               /* Float four columns side by side */
+               .column {
+               float: left;
+               width: 45%;
+               padding: 10px 10px;
+               }
+               /* Remove extra left and right margins, due to padding */
+               .row {margin: 0 -5px;}
+               /* Clear floats after the columns */
+               .row:after {
+               content: &quot;&quot;;
+               display: table;
+               clear: both;
+               }
+               /* Responsive columns */
+               @media screen and (max-width: 600px) {
+               .column {
+               width: 100%;
+               display: block;
+               margin-bottom: 20px;
+               }
+               }
+               /* Style the counter cards */
+               .card {
+               box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+               padding: 16px;
+               background-color: #f1f1f1;
+               overflow-y: auto;
+               height: 500px;
+               }
+            &lt;/style&gt;
+         &lt;/head&gt;
+         &lt;body onselectstart=&quot;window.event.returnValue=false;&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+               {$CARDS}
+            &lt;/div&gt;
+      &lt;/html&gt;
+    </Item>
+    <Item Key="CardTemplate">
+      &lt;div class=&quot;column&quot;&gt;
+        &lt;div class=&quot;card&quot;&gt;
+	        &lt;h3 style=&quot;word-break: break-all;&quot;&gt;{$id}&lt;/h3&gt;
+	        &lt;img src=&quot;data:image/png;base64, {$screenshot}&quot; style=&quot;height: 100px&quot; alt=&quot;&quot; /&gt;
+	        &lt;p&gt;Computers: {$computers}&lt;/p&gt;
+	        &lt;p&gt;NoRV App: {$usage}&lt;/p&gt;
+	        &lt;p&gt;OBS: {$obs}&lt;/p&gt;
+	        &lt;p&gt;Depo: {$depo}&lt;/p&gt;
+	        &lt;p&gt;# of Jobs: {$jobs}&lt;/p&gt;
+	        &lt;p&gt;Button Status: {$button}&lt;/p&gt;
+	        &lt;p&gt;Witness: {$witness}&lt;/p&gt;
+	        &lt;p&gt;OBS-Slave: {$slave_obs}&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    </Item> 
+  </Global>
+</AppConfig>
