@@ -8,6 +8,7 @@
       &lt;html&gt;
          &lt;head&gt;
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+            &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
             &lt;style&gt;
                * {
                box-sizing: border-box;
@@ -45,7 +46,29 @@
                overflow-y: auto;
                height: 500px;
                }
+                .active {
+                height: 240px !important;
+                position: absolute;
+                left: 50%; top: 50%;
+                transform: translate(-50%, -50%);
+               }
             &lt;/style&gt;
+            &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+            &lt;script&gt;
+              $(document).ready(function() {
+                $(&apos;img&apos;).click(function() {
+                  $(&apos;.active&apos;).not(this).addClass(&apos;non_active&apos;);
+                  $(&apos;.active&apos;).not(this).removeClass(&apos;active&apos;);
+                  if ($(this).hasClass(&apos;active&apos;)) {
+                    $(this).addClass(&apos;non_active&apos;);
+                    $(this).removeClass(&apos;active&apos;);
+                  } else {
+                    $(this).removeClass(&apos;non_active&apos;);
+                    $(this).addClass(&apos;active&apos;);
+                  }
+                });
+              });
+            &lt;/script&gt;
          &lt;/head&gt;
          &lt;body onselectstart=&quot;window.event.returnValue=false;&quot;&gt;
             &lt;div class=&quot;row&quot;&gt;
@@ -58,10 +81,10 @@
         &lt;div class=&quot;card&quot;&gt;
 	        &lt;h3 style=&quot;word-break: break-all;&quot;&gt;{$id}&lt;/h3&gt;
 	        &lt;img src=&quot;data:image/png;base64, {$screenshot}&quot; style=&quot;height: 100px&quot; alt=&quot;&quot; /&gt;
+          &lt;p&gt;Last Update: {$master_update}&lt;/p&gt;
 	        &lt;p&gt;Computers: {$computers}&lt;/p&gt;
 	        &lt;p&gt;NoRV App: {$usage}&lt;/p&gt;
 	        &lt;p&gt;OBS: {$obs}&lt;/p&gt;
-	        &lt;p&gt;Depo: {$depo}&lt;/p&gt;
 	        &lt;p&gt;# of Jobs: {$jobs}&lt;/p&gt;
 	        &lt;p&gt;Button Status: {$button}&lt;/p&gt;
 	        &lt;p&gt;Witness: {$witness}&lt;/p&gt;

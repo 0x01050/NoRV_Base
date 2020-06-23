@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -98,7 +99,23 @@ namespace Base
                     string card = Config.getInstance().getCardTemplate();
                     foreach(var info in item)
                     {
-                        card = card.Replace("{$" + info.Key + "}", info.Value);
+                        string key = info.Key;
+                        string value = info.Value;
+                        if(key.Contains("update"))
+                        {
+                            if(value == "0000-00-00 00:00:00")
+                            {
+                                value = "";
+                            }
+                            else
+                            {
+                                DateTime convertedDate = DateTime.SpecifyKind(DateTime.Parse(value), DateTimeKind.Utc);
+                                convertedDate = convertedDate.AddHours(5);
+                                convertedDate = convertedDate.ToLocalTime();
+                                value = convertedDate.ToString("yyyy-MM-dd h:mm:sstt");
+                            }
+                        }
+                        card = card.Replace("{$" + info.Key + "}", value);
                     }
                     card = card.Replace("<img src=\"data:image/png;base64, \" style=\"height: 100px\" alt=\"\" />", "<div style=\"height:100px\"></div>");
                     cards = cards + "\n" + card + "\n";

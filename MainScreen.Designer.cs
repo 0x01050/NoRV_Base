@@ -30,11 +30,11 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.txtVideographer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cardsBrowser = new System.Windows.Forms.WebBrowser();
-            this.btnAdd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -89,6 +89,16 @@
             this.splitContainer2.TabIndex = 0;
             this.splitContainer2.TabStop = false;
             // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(13, 14);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.TabIndex = 1;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
             // btnUpdate
             // 
             this.btnUpdate.Location = new System.Drawing.Point(110, 14);
@@ -122,22 +132,11 @@
             // 
             this.cardsBrowser.AllowWebBrowserDrop = false;
             this.cardsBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cardsBrowser.IsWebBrowserContextMenuEnabled = false;
             this.cardsBrowser.Location = new System.Drawing.Point(0, 0);
             this.cardsBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.cardsBrowser.Name = "cardsBrowser";
             this.cardsBrowser.Size = new System.Drawing.Size(757, 336);
             this.cardsBrowser.TabIndex = 0;
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Location = new System.Drawing.Point(13, 14);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 1;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // MainScreen
             // 
