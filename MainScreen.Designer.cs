@@ -132,6 +132,7 @@
             // 
             this.cardsBrowser.AllowWebBrowserDrop = false;
             this.cardsBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cardsBrowser.IsWebBrowserContextMenuEnabled = false;
             this.cardsBrowser.Location = new System.Drawing.Point(0, 0);
             this.cardsBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.cardsBrowser.Name = "cardsBrowser";
