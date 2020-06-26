@@ -36,29 +36,34 @@ namespace Base
 
         private async void FetchSettings()
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(Config.getInstance().getServerUrl() + "/info");
-            if(response.StatusCode == HttpStatusCode.OK)
+            try
             {
-                string content = await response.Content.ReadAsStringAsync();
-                var respObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-                foreach (var item in respObj)
+
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync(Config.getInstance().getServerUrl() + "/info");
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    switch(item.Key)
+                    string content = await response.Content.ReadAsStringAsync();
+                    var respObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
+                    foreach (var item in respObj)
                     {
-                        case "Videographer":
-                            videographer = item.Value;
-                            break;
-                        case "Commission":
-                            commission = item.Value;
-                            break;
+                        switch (item.Key)
+                        {
+                            case "Videographer":
+                                videographer = item.Value;
+                                break;
+                            case "Commission":
+                                commission = item.Value;
+                                break;
+                        }
                     }
                 }
+                Invoke(new Action(() =>
+                {
+                    txtVideographer.Text = videographer;
+                }));
             }
-            Invoke(new Action(() =>
-            {
-                txtVideographer.Text = videographer;
-            }));
+            catch(Exception) { }
         }
 
         Thread fetchThread = null;
@@ -86,50 +91,55 @@ namespace Base
 
         private void fetchWork()
         {
-            string cards = "";
-            HttpClient client = new HttpClient();
-            MultipartFormDataContent httpContent = new MultipartFormDataContent();
-            HttpResponseMessage response = client.PostAsync(Config.getInstance().getServerUrl() + "/status", httpContent).Result;
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
-                string content = response.Content.ReadAsStringAsync().Result;
-                var respObj = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(content);
-                foreach (var item in respObj)
+
+                string cards = "";
+                HttpClient client = new HttpClient();
+                MultipartFormDataContent httpContent = new MultipartFormDataContent();
+                HttpResponseMessage response = client.PostAsync(Config.getInstance().getServerUrl() + "/status", httpContent).Result;
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    string card = Config.getInstance().getCardTemplate();
-                    foreach(var info in item)
+                    string content = response.Content.ReadAsStringAsync().Result;
+                    var respObj = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(content);
+                    foreach (var item in respObj)
                     {
-                        string key = info.Key;
-                        string value = info.Value;
-                        if(key.Contains("update"))
+                        string card = Config.getInstance().getCardTemplate();
+                        foreach (var info in item)
                         {
-                            if(value == "0000-00-00 00:00:00")
+                            string key = info.Key;
+                            string value = info.Value;
+                            if (key.Contains("update"))
                             {
-                                value = "";
+                                if (value == "0000-00-00 00:00:00")
+                                {
+                                    value = "";
+                                }
+                                else
+                                {
+                                    DateTime convertedDate = DateTime.SpecifyKind(DateTime.Parse(value), DateTimeKind.Utc);
+                                    convertedDate = convertedDate.AddHours(5);
+                                    convertedDate = convertedDate.ToLocalTime();
+                                    value = convertedDate.ToString("yyyy-MM-dd h:mm:sstt");
+                                }
                             }
-                            else
-                            {
-                                DateTime convertedDate = DateTime.SpecifyKind(DateTime.Parse(value), DateTimeKind.Utc);
-                                convertedDate = convertedDate.AddHours(5);
-                                convertedDate = convertedDate.ToLocalTime();
-                                value = convertedDate.ToString("yyyy-MM-dd h:mm:sstt");
-                            }
+                            card = card.Replace("{$" + info.Key + "}", value);
                         }
-                        card = card.Replace("{$" + info.Key + "}", value);
+                        card = card.Replace("<img src=\"data:image/png;base64, \" style=\"height: 100px\" alt=\"\" />", "<div style=\"height:100px\"></div>");
+                        cards = cards + "\n" + card + "\n";
                     }
-                    card = card.Replace("<img src=\"data:image/png;base64, \" style=\"height: 100px\" alt=\"\" />", "<div style=\"height:100px\"></div>");
-                    cards = cards + "\n" + card + "\n";
                 }
+                string html = Config.getInstance().getHtmlTemplate();
+                html = html.Replace("{$CARDS}", cards);
+                Invoke(new Action(() =>
+                {
+                    cardsBrowser.Navigate("about:blank");
+                    HtmlDocument doc = cardsBrowser.Document;
+                    doc.Write(String.Empty);
+                    cardsBrowser.DocumentText = html;
+                }));
             }
-            string html = Config.getInstance().getHtmlTemplate();
-            html = html.Replace("{$CARDS}", cards);
-            Invoke(new Action(() =>
-            {
-                cardsBrowser.Navigate("about:blank");
-                HtmlDocument doc = cardsBrowser.Document;
-                doc.Write(String.Empty);
-                cardsBrowser.DocumentText = html;
-            }));
+            catch(Exception) { }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)

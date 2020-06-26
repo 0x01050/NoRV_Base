@@ -25,36 +25,45 @@ namespace Base
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Application.UseWaitCursor = true;
-
-            string id= txtID.Text;
-            string master= txtMaster.Text;
-            string slave = txtSlave.Text;
-
-            HttpClient client = new HttpClient();
-            MultipartFormDataContent httpContent = new MultipartFormDataContent();
-            httpContent.Add(new StringContent(id), "id");
-            httpContent.Add(new StringContent(master), "master");
-            httpContent.Add(new StringContent(slave), "slave");
-            HttpResponseMessage response = client.PostAsync(Config.getInstance().getServerUrl() + "/machine", httpContent).Result;
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
-                var result = response.Content.ReadAsStringAsync().Result;
-                if (result == "Successfully Added")
+
+                Application.UseWaitCursor = true;
+
+                string id= txtID.Text;
+                string master= txtMaster.Text;
+                string slave = txtSlave.Text;
+
+                HttpClient client = new HttpClient();
+                MultipartFormDataContent httpContent = new MultipartFormDataContent();
+                httpContent.Add(new StringContent(id), "id");
+                httpContent.Add(new StringContent(master), "master");
+                httpContent.Add(new StringContent(slave), "slave");
+                HttpResponseMessage response = client.PostAsync(Config.getInstance().getServerUrl() + "/machine", httpContent).Result;
+                Application.UseWaitCursor = false;
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    DialogResult = DialogResult.OK;
-                    Close();
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    if (result == "Successfully Added")
+                    {
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(result);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(result);
+                    MessageBox.Show(response.StatusCode.ToString());
                 }
             }
-            else
+            catch (Exception)
             {
-                MessageBox.Show(response.StatusCode.ToString());
+
+                Application.UseWaitCursor = false;
             }
-            Application.UseWaitCursor = false;
         }
     }
 }

@@ -31,24 +31,31 @@ namespace Base
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Application.UseWaitCursor = true;
-            videographer = txtVideographer.Text;
-            commission = txtCommission.Text;
-            HttpClient client = new HttpClient();
-            MultipartFormDataContent httpContent = new MultipartFormDataContent();
-            httpContent.Add(new StringContent(videographer), "Videographer");
-            httpContent.Add(new StringContent(commission), "Commission");
-            HttpResponseMessage response = client.PostAsync(Config.getInstance().getServerUrl() + "/info", httpContent).Result;
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
-                DialogResult = DialogResult.OK;
-                Close();
+                Application.UseWaitCursor = true;
+                videographer = txtVideographer.Text;
+                commission = txtCommission.Text;
+                HttpClient client = new HttpClient();
+                MultipartFormDataContent httpContent = new MultipartFormDataContent();
+                httpContent.Add(new StringContent(videographer), "Videographer");
+                httpContent.Add(new StringContent(commission), "Commission");
+                HttpResponseMessage response = client.PostAsync(Config.getInstance().getServerUrl() + "/info", httpContent).Result;
+                Application.UseWaitCursor = false;
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show(response.StatusCode.ToString());
+                }
             }
-            else
+            catch(Exception)
             {
-                MessageBox.Show(response.StatusCode.ToString());
+                Application.UseWaitCursor = false;
             }
-            Application.UseWaitCursor = false;
         }
     }
 }
